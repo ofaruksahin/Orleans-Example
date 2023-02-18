@@ -1,3 +1,4 @@
+using Grains.Interfaces;
 using Orleans.Configuration;
 
 var hostBuilder = Host.CreateDefaultBuilder()
@@ -17,3 +18,8 @@ var host = hostBuilder.Build();
 await host.StartAsync();
 
 var client = host.Services.GetRequiredService<IClusterClient>();
+
+var grain = client.GetGrain<IStocksStreamingGrain>("AAPL");
+var price = await grain.GetPrice();
+
+Console.WriteLine(price);

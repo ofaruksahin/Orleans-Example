@@ -1,3 +1,5 @@
+using Grains.Interfaces.Services;
+using Grains.Services;
 using Orleans.Configuration;
 
 var hostBuilder = Host.CreateDefaultBuilder()
@@ -7,6 +9,12 @@ var hostBuilder = Host.CreateDefaultBuilder()
         .UseLocalhostClustering()
         .AddMemoryGrainStorageAsDefault()
         .UseDashboard()
+        .ConfigureServices(services =>
+        {
+            services
+                .AddGrainService<StocksGrainService>()
+                .AddSingleton<IStocksGrainServiceClient, StocksGrainServiceClient>();
+        })
         .Configure<ClusterOptions>(options =>
         {
             options.ClusterId = "dev";
